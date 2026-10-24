@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Tax Compliance Access | CETTP{% endblock %}
+{% block content %}<div class="access-wrap"><div class="access-card"><div class="role-icon green-icon">✓</div><div class="eyebrow">RESTRICTED WORKSPACE</div><h1 class="h3 fw-bold mt-2">Tax Compliance Access</h1><p class="text-muted">Enter the security code to open the tax tracking workspace.</p>
+<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="mb-3"><label class="form-label" for="actor_name">Tax officer name (optional)</label><input class="form-control form-control-lg" id="actor_name" name="actor_name" maxlength="120" placeholder="Enter your name"></div>
+<div class="mb-4"><label class="form-label" for="security_code">Security code</label><input class="form-control form-control-lg" id="security_code" name="security_code" type="password" inputmode="numeric" required autocomplete="off" autofocus></div>
+<button class="btn btn-dark btn-lg w-100" type="submit">Verify and continue →</button></form><a class="d-block text-center mt-3" href="{{ url_for('home') }}">← Back to role selection</a></div></div>{% endblock %}

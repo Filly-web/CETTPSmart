@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Welcome | CETTP{% endblock %}
+{% block content %}
+<section class="welcome-banner">
+ <div class="welcome-copy"><div class="eyebrow light">INSURANCE TAX OPERATIONS</div><h1>Welcome to CETTP v1.0</h1><p>Manage policy cancellations and endorsements from initiation through tax review, TRA processing and final closure.</p></div>
+ <div class="banner-art"><div class="banner-circle circle-one"></div><div class="banner-circle circle-two"></div><div class="document-illustration"><span class="doc-line long"></span><span class="doc-line"></span><span class="doc-line short"></span><div class="doc-stamp">✓</div></div></div>
+</section>
+<div class="page-intro"><div><div class="eyebrow">GET STARTED</div><h2 class="page-title">Choose your workspace</h2><p class="text-muted mb-0">Select the role that matches your responsibility in the workflow.</p></div></div>
+<div class="row g-4">
+ <div class="col-lg-6"><div class="role-card role-initiator"><div class="role-card-top"><div class="role-icon">＋</div><span class="role-label">REQUEST CREATION</span></div><h2>Initiator Workspace</h2><p>Create a new policy cancellation or endorsement, capture customer and invoice details, and submit the request for Tax Compliance review.</p><ul class="feature-list"><li>Submit cancellation requests</li><li>Submit endorsement requests</li><li>Receive a unique tracking reference</li></ul><a class="btn btn-primary btn-lg w-100" href="{{ url_for('enter_role', role='initiator') }}">Enter as Initiator <span class="float-end">→</span></a></div></div>
+ <div class="col-lg-6"><div class="role-card role-tax"><div class="role-card-top"><div class="role-icon green-icon">✓</div><span class="role-label green-label">CONTROL &amp; COMPLIANCE</span></div><h2>Tax Compliance Workspace</h2><p>Review requests, maintain tax documents, track TRA submissions and approvals, and record final closure.</p><ul class="feature-list"><li>Manage tax and TRA statuses</li><li>Track credit notes and replacement invoices</li><li>Maintain case history and oversight</li></ul><a class="btn btn-dark btn-lg w-100" href="{{ url_for('enter_role', role='tax') }}">Open Tax Workspace <span class="float-end">→</span></a></div></div>
+</div>
+<div class="home-info-strip mt-4"><div class="info-icon">i</div><div><strong>One workflow. Clear accountability.</strong><p class="mb-0">Every request receives a unique CETTP reference to support tracking, review and closure.</p></div></div>
+{% endblock %}

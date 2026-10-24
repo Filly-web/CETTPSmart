@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Tax Dashboard | CETTP{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">CONTROL CENTRE</div><h1 class="page-title">Dashboard Overview</h1><p class="text-muted mb-0">A live view of policy adjustments and tax processing.</p></div><a class="btn btn-primary" href="{{ url_for('cases') }}">View all cases <span class="ms-2">→</span></a></div>
+<div class="dashboard-banner"><div><span class="banner-tag">TAX COMPLIANCE WORKSPACE</span><h2>Good control starts with clear visibility.</h2><p>Monitor requests, follow up pending TRA actions and keep every case moving towards closure.</p></div><div class="banner-check">✓</div></div>
+<div class="row g-3 mb-4">
+{% for label,value,sub,cls,icon in [('Total Cases',total,'All requests registered','metric-blue','▤'),('Open Cases',open_cases,'Awaiting final closure','metric-green','◷'),('Pending TRA',awaiting_tra,'Not submitted or awaiting response','metric-orange','↗'),('Closed Cases',closed,'Completed workflow','metric-purple','✓')] %}
+<div class="col-6 col-xl-3"><div class="metric-card {{ cls }}"><div class="metric-top"><span>{{ label }}</span><span class="metric-icon">{{ icon }}</span></div><div class="metric-value">{{ value }}</div><div class="metric-sub">{{ sub }}</div><div class="metric-track"><span style="width:{{ (value / total * 100)|round|int if total else 0 }}%"></span></div></div></div>{% endfor %}
+</div>
+<div class="row g-4 mb-4"><div class="col-xl-7"><div class="panel chart-panel h-100"><div class="panel-heading"><div><h2>Workflow pipeline</h2><p>Cases by current workflow status</p></div><span class="panel-badge blue-badge">BY STATUS</span></div><canvas id="statusChart" height="210"></canvas></div></div><div class="col-xl-5"><div class="panel chart-panel h-100"><div class="panel-heading"><div><h2>Request mix</h2><p>Cancellations vs endorsements</p></div><span class="panel-badge purple-badge">BY TYPE</span></div><canvas id="typeChart" height="210"></canvas></div></div></div>
+<div class="panel"><div class="panel-heading"><div><h2>Recent cases</h2><p>Latest requests entered into CETTP</p></div><a class="panel-action" href="{{ url_for('cases') }}">View all cases →</a></div>{% include "_case_table.html" %}</div>
+{% endblock %}
+{% block scripts %}<script>
+const statusLabels={{ by_status|map(attribute=0)|list|tojson }}; const statusValues={{ by_status|map(attribute=1)|list|tojson }};
+const typeLabels={{ by_type|map(attribute=0)|list|tojson }}; const typeValues={{ by_type|map(attribute=1)|list|tojson }};
+Chart.defaults.font.family="'DM Sans', sans-serif"; Chart.defaults.color="#71809a";
+new Chart(document.getElementById('statusChart'),{type:'bar',data:{labels:statusLabels,datasets:[{label:'Cases',data:statusValues,backgroundColor:['#1769e8','#13a66b','#ff941f','#8250df','#18a9c8','#e65d78'],borderRadius:7,maxBarThickness:42}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{precision:0},grid:{color:'#edf1f7'}}}}});
+new Chart(document.getElementById('typeChart'),{type:'doughnut',data:{labels:typeLabels,datasets:[{data:typeValues,backgroundColor:['#1769e8','#13a66b','#ffab22','#8250df'],borderWidth:4,borderColor:'#fff',hoverOffset:8}]},options:{cutout:'67%',responsive:true,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:18}}}}});
+</script>{% endblock %}

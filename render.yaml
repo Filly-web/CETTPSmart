@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: cettp-portal
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SECRET_KEY
+        generateValue: true
+      - key: TAX_ACCESS_CODE
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cettp-db
+          property: connectionString
+databases:
+  - name: cettp-db
+    plan: basic-256mb

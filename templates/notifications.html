@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Notifications | CETTP{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><div class="eyebrow">TAX COMPLIANCE WORKSPACE</div><h1 class="page-title">Notifications</h1><p class="text-muted mb-0">New cancellation and endorsement requests submitted by Initiators.</p></div>
+  <div class="d-flex gap-2"><form method="post" action="{{ url_for('mark_all_notifications_read') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-outline-primary" type="submit" {% if unread_count == 0 %}disabled{% endif %}>Mark all as read</button></form><a class="btn btn-primary" href="{{ url_for('dashboard') }}">Back to dashboard</a></div>
+</div>
+<div class="panel">
+  <div class="panel-heading"><div><h2>Request alerts</h2><p>Unread notifications are highlighted until you open the case.</p></div><span class="panel-badge blue-badge">{{ notifications|length }} RECENT</span></div>
+  {% if notifications %}
+  <div class="list-group list-group-flush">
+    {% for item in notifications %}
+    {% set is_read = item.id in read_ids %}
+    <div class="list-group-item px-0 py-3 {% if not is_read %}bg-light{% endif %}">
+      <div class="d-flex align-items-start gap-3">
+        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 {% if is_read %}bg-secondary-subtle text-secondary{% else %}bg-primary-subtle text-primary{% endif %}" style="width:42px;height:42px">{% if item.title.lower().find('cancellation') >= 0 %}↩{% else %}✎{% endif %}</div>
+        <div class="flex-grow-1">
+          <div class="d-flex flex-wrap align-items-center gap-2"><strong>{{ item.title }}</strong>{% if is_read %}<span class="badge text-bg-secondary">Read</span>{% else %}<span class="badge text-bg-primary">Unread</span>{% endif %}</div>
+          <p class="mb-1 mt-1">{{ item.message }}</p>
+          <div class="small text-muted">{{ item.case_reference }} · {{ item.created_at.strftime('%d %b %Y, %H:%M UTC') }}</div>
+        </div>
+        <form method="post" action="{{ url_for('mark_notification_read', notification_id=item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm {% if is_read %}btn-outline-secondary{% else %}btn-primary{% endif %}" type="submit">{% if is_read %}Open case{% else %}Review request{% endif %}</button></form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5"><div class="display-6 mb-2">🔔</div><h3 class="h5">No notifications yet</h3><p class="text-muted mb-0">New cancellation and endorsement requests will appear here automatically.</p></div>
+  {% endif %}
+</div>
+{% endblock %}
